@@ -6,19 +6,19 @@ exports.createThing = (req, res, next) => {
         ...req.body
     });
     thing.save()
-    .then(() => res.status(201).json({message: 'Livre enregistre !'}))
+    .then(() => res.status(201).json({message: 'Livre enregistré !'}))
     .catch((error) => {res.status(400).json({error: error})});
 };
 
 exports.modifyThing = (req, res, next) => {
     Thing.updateOne({_id: req.params.id}, thing)
-    .then(() => {res.status(201).json({message: 'Livre modifie !'})})
+    .then(() => {res.status(201).json({message: 'Livre modifié !'})})
     .catch((error) => {res.status(400).json({error: error})});
 };
 
 exports.deleteThing = (req, res, next) => {
     Thing.deleteOne({_id: req.params.id})
-    .then(() => {res.status(200).json({message: 'Livre supprime !'})})
+    .then(() => {res.status(200).json({message: 'Livre supprimé !'})})
     .catch((error) => {res.status(400).json({error: error})});
 };
 
