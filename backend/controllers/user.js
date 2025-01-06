@@ -19,12 +19,11 @@ exports.signup = (req, res, next) => {
         })
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => {
-            console.error('Erreur lors de l\'inscription :', error);
+            console.error('Erreur lors de l inscription :', error);
             res.status(400).json({ error });
         });
 };
 
-// Connexion
 exports.login = (req, res, next) => {
     if (!req.body.email || !req.body.password) {
         return res.status(400).json({ message: 'Email et mot de passe requis' });
@@ -45,7 +44,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            process.env.JWT_SECRET || 'default_secret', // Utilise une variable d'environnement
+                            process.env.JWT_SECRET || 'default_secret',
                             { expiresIn: '24h' }
                         )
                     });
@@ -56,7 +55,7 @@ exports.login = (req, res, next) => {
                 });
         })
         .catch(error => {
-            console.error('Erreur lors de la recherche de l\'utilisateur :', error);
+            console.error('Erreur lors de la recherche de l utilisateur :', error);
             res.status(500).json({ error });
         });
 };
