@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
-// Inscription
 exports.signup = (req, res, next) => {
     if (!req.body.email || !req.body.password) {
         return res.status(400).json({ message: 'Email et mot de passe requis' });

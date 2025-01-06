@@ -14,21 +14,24 @@ if (!process.env.MONGODB_URI) {
 }
 
 mongoose
-    .connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true })
+    .connect(process.env.MONGODB_URI)
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch((error) => {
         console.error("Connexion à MongoDB échouée :", error);
-        process.exit(1); 
+        process.exit(1);
     });
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+}));
 
 app.use(express.json());
 
 app.use("/api/books", stuffRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", userRoutes); 
 
 module.exports = app;
+
 
