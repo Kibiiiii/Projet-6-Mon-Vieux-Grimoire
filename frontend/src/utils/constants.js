@@ -14,4 +14,3 @@ export const APP_ROUTES = {
   BOOK: '/livre/:id',
   UPDATE_BOOK: '/livre/modifier/:id',
 };
-};

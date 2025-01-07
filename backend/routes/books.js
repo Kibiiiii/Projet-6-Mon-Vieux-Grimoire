@@ -14,10 +14,11 @@ const validateId = (req, res, next) => {
     next();
 };
 
-router.get('/', auth, booksCtrl.getAllStuff);
-router.post('/', auth, booksCtrl.createThing);
-router.get('/:id', auth, validateId, booksCtrl.getOneThing);
-router.put('/:id', auth, validateId, booksCtrl.modifyThing);
-router.delete('/:id', auth, validateId, booksCtrl.deleteThing);
+router.get('/', auth, booksCtrl.getAllBooks);
+router.post('/', auth, booksCtrl.createBook);
+router.get('/:id', auth, validateId, booksCtrl.getOneBook);
+router.put('/:id', auth, validateId, booksCtrl.modifyBook);
+router.delete('/:id', auth, validateId, booksCtrl.deleteBook);
+
 
 module.exports = router;
