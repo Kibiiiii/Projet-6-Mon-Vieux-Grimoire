@@ -18,7 +18,7 @@ const validateId = (req, res, next) => {
 router.get('/', auth, booksCtrl.getAllBooks);
 router.post('/', auth, multer, booksCtrl.createBook);
 router.get('/:id', auth, validateId, booksCtrl.getOneBook);
-router.put('/:id', auth, validateId, booksCtrl.modifyBook);
+router.put('/:id', auth, multer, validateId, booksCtrl.modifyBook);
 router.delete('/:id', auth, validateId, booksCtrl.deleteBook);
 
 
