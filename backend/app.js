@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const stuffRoutes = require("./routes/stuff");
+const booksRoutes = require("./routes/books");
 const userRoutes = require("./routes/user");
 
 dotenv.config();
@@ -31,9 +31,10 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use("/api/stuff", stuffRoutes);
+app.use("/api/books", booksRoutes);
 app.use("/api/auth", userRoutes); 
 
 module.exports = app;
+
 
 

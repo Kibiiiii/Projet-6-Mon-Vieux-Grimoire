@@ -1,10 +1,10 @@
-const Thing = require('../models/Thing');
+const Books = require('../models/Books');
 
-exports.createThing = (req, res, next) => {
-    const thing = new Thing({
+exports.createBook = (req, res, next) => {
+    const book = new Books({
         ...req.body
     });
-    thing.save()
+    book.save()
         .then(() => res.status(201).json({ message: 'Livre enregistré !' }))
         .catch((error) => {
             console.error('Erreur lors de la création du livre :', error);
@@ -12,8 +12,8 @@ exports.createThing = (req, res, next) => {
         });
 };
 
-exports.modifyThing = (req, res, next) => {
-    Thing.updateOne(
+exports.modifyBook = (req, res, next) => {
+    Books.updateOne(
         { _id: req.params.id },
         { ...req.body, _id: req.params.id }
     )
@@ -24,13 +24,13 @@ exports.modifyThing = (req, res, next) => {
         });
 };
 
-exports.deleteThing = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then((thing) => {
-            if (!thing) {
+exports.deleteBook = (req, res, next) => {
+    Books.findOne({ _id: req.params.id })
+        .then((book) => {
+            if (!book) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
-            return Thing.deleteOne({ _id: req.params.id });
+            return Books.deleteOne({ _id: req.params.id });
         })
         .then(() => res.status(200).json({ message: 'Livre supprimé !' }))
         .catch((error) => {
@@ -39,13 +39,13 @@ exports.deleteThing = (req, res, next) => {
         });
 };
 
-exports.getOneThing = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then((thing) => {
-            if (!thing) {
+exports.getOneBook = (req, res, next) => {
+    Books.findOne({ _id: req.params.id })
+        .then((book) => {
+            if (!book) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
-            res.status(200).json(thing);
+            res.status(200).json(book);
         })
         .catch((error) => {
             console.error('Erreur lors de la récupération du livre :', error);
@@ -53,11 +53,12 @@ exports.getOneThing = (req, res, next) => {
         });
 };
 
-exports.getAllStuff = (req, res, next) => {
-    Thing.find()
-        .then((things) => res.status(200).json(things))
+exports.getAllBooks = (req, res, next) => {
+    Books.find()
+        .then((books) => res.status(200).json(books))
         .catch((error) => {
             console.error('Erreur lors de la récupération du livre :', error);
             res.status(400).json({ error });
         });
 };
+
