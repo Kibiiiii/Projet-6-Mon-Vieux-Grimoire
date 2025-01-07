@@ -1,9 +1,15 @@
 const Books = require('../models/Books');
 
 exports.createBook = (req, res, next) => {
+    const bookObject = JSON.parse(req.body.book); // Remplacement de "thing" par "book"
+    delete bookObject._id; // Supprime un éventuel _id envoyé dans la requête
+
     const book = new Books({
-        ...req.body
+        ...bookObject,
+        userId: req.auth.userId, // On associe le livre à l'utilisateur authentifié
+        imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null // Ajout de l'image si fournie
     });
+
     book.save()
         .then(() => res.status(201).json({ message: 'Livre enregistré !' }))
         .catch((error) => {
@@ -11,6 +17,7 @@ exports.createBook = (req, res, next) => {
             res.status(400).json({ error });
         });
 };
+
 
 exports.modifyBook = (req, res, next) => {
     Books.updateOne(
