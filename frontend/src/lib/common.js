@@ -41,19 +41,10 @@ export async function getAuthenticatedUser() {
 
 export async function getBooks() {
   console.log('Tentative de récupération des livres');
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('Pas de token, utilisateur non authentifié');
-    return [];
-  }
-
   try {
     const response = await axios({
       method: 'GET',
       url: `${API_ROUTES.BOOKS}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     console.log('Réponse de l\'API pour la récupération des livres:', response);
     const books = formatBooks(response.data);
@@ -101,16 +92,10 @@ export async function getBestRatedBooks() {
 
 export async function deleteBook(id) {
   console.log(`Tentative de suppression du livre avec l'id: ${id}`);
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('Pas de token, utilisateur non authentifié');
-    return false;
-  }
-
   try {
     await axios.delete(`${API_ROUTES.BOOKS}/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
     console.log(`Livre avec l'id: ${id} supprimé avec succès`);
@@ -128,16 +113,10 @@ export async function rateBook(id, userId, rating) {
     rating: parseInt(rating, 10),
   };
 
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('Pas de token, utilisateur non authentifié');
-    return null;
-  }
-
   try {
     const response = await axios.post(`${API_ROUTES.BOOKS}/${id}/rating`, data, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
     const book = response.data;
@@ -154,12 +133,6 @@ export async function rateBook(id, userId, rating) {
 export async function addBook(data) {
   console.log('Tentative d\'ajout d\'un nouveau livre avec les données:', data);
   const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
-  if (!token || !userId) {
-    console.error('Pas de token ou userId, utilisateur non authentifié');
-    return { error: true, message: 'Utilisateur non authentifié' };
-  }
-
   const book = {
     userId,
     title: data.title,
@@ -172,7 +145,6 @@ export async function addBook(data) {
     }],
     averageRating: parseInt(data.rating, 10),
   };
-
   const bodyFormData = new FormData();
   bodyFormData.append('book', JSON.stringify(book));
   bodyFormData.append('image', data.file[0]);
@@ -184,7 +156,7 @@ export async function addBook(data) {
       url: `${API_ROUTES.BOOKS}`,
       data: bodyFormData,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
     console.log('Réponse de l\'API après ajout du livre:', response);
@@ -198,11 +170,6 @@ export async function addBook(data) {
 export async function updateBook(data, id) {
   console.log(`Tentative de mise à jour du livre avec l'id: ${id} et les données:`, data);
   const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
-  if (!token || !userId) {
-    console.error('Pas de token ou userId, utilisateur non authentifié');
-    return { error: true, message: 'Utilisateur non authentifié' };
-  }
 
   let newData;
   const book = {
@@ -212,7 +179,6 @@ export async function updateBook(data, id) {
     year: data.year,
     genre: data.genre,
   };
-
   console.log('Image associée au livre:', data.file[0]);
   if (data.file[0]) {
     newData = new FormData();
@@ -229,7 +195,7 @@ export async function updateBook(data, id) {
       url: `${API_ROUTES.BOOKS}/${id}`,
       data: newData,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
     console.log('Réponse de l\'API après mise à jour du livre:', newBook);

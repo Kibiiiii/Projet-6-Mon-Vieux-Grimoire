@@ -2,21 +2,16 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   try {
-    // Vérification du token
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ message: 'Token non fourni' });
-    }
+    const token = req.headers.authorization.split(' ')[1]; // récupère le token
+    console.log('Token reçu:', token); // Ajoute ce log pour vérifier le token reçu
     
-    console.log('Token reçu:', token); // Vérifie le token reçu
-    
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Utilisation d'une variable d'environnement pour la clé secrète
-    console.log('Token décodé:', decodedToken); // Vérifie le décodage
-    
-    req.auth = { userId: decodedToken.userId }; // Ajoute l'ID utilisateur à la requête
+    const decodedToken = jwt.verify(token, 'votre_clé_secrète'); // vérifie le token
+    console.log('Token décodé:', decodedToken); // Vérifie si le décodage est réussi
+
+    req.auth = { userId: decodedToken.userId }; // met l'ID utilisateur dans la requête
     next();
   } catch (error) {
-    console.error('Erreur d\'authentification:', error);
+    console.error('Erreur d\'authentification:', error); // Ajoute ce log pour voir les erreurs
     res.status(401).json({ message: 'Non autorisé' });
   }
 };
