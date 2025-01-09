@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 module.exports = (req, res, next) => {
   try {
@@ -15,7 +16,7 @@ module.exports = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     console.log('Token reçu:', token);
 
-    const decodedToken = jwt.verify(token, 'votre_clé_secrète');
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Token décodé:', decodedToken);
 
     req.auth = { userId: decodedToken.userId };
@@ -25,4 +26,5 @@ module.exports = (req, res, next) => {
     res.status(401).json({ message: 'Non autorisé' });
   }
 };
+
 

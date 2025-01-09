@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+console.log('Clé secrète JWT:', process.env.JWT_SECRET); // Log pour vérifier si la clé est bien lue
+
 const normalizePort = (val) => {
     const port = parseInt(val, 10);
     if (isNaN(port)) return val;
@@ -43,6 +45,7 @@ server.on('listening', () => {
     const bind = typeof address === 'string' ? `pipe ${address}` : `port ${port}`;
     console.log(`Listening on ${bind}`);
 });
+
 
 
 
