@@ -17,8 +17,8 @@ module.exports = (req, res, next) => {
     console.log('Token reçu:', token);
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Token décodé:', decodedToken);
-
+    console.log('Token reçu dans le middleware :', token); // Log pour vérif
+    
     req.auth = { userId: decodedToken.userId };
     next();
   } catch (error) {
