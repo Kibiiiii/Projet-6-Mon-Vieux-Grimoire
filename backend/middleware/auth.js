@@ -2,16 +2,26 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1]; // récupère le token
-    console.log('Token reçu:', token); // Ajoute ce log pour vérifier le token reçu
-    
-    const decodedToken = jwt.verify(token, 'votre_clé_secrète'); // vérifie le token
-    console.log('Token décodé:', decodedToken); // Vérifie si le décodage est réussi
+    const authHeader = req.headers.authorization;
 
-    req.auth = { userId: decodedToken.userId }; // met l'ID utilisateur dans la requête
+    if (!authHeader) {
+      throw new Error('Authorization header is missing');
+    }
+
+    if (!authHeader.startsWith('Bearer ')) {
+      throw new Error('Authorization header is malformed');
+    }
+
+    const token = authHeader.split(' ')[1];
+    console.log('Token reçu:', token);
+
+    const decodedToken = jwt.verify(token, 'votre_clé_secrète');
+    console.log('Token décodé:', decodedToken);
+
+    req.auth = { userId: decodedToken.userId };
     next();
   } catch (error) {
-    console.error('Erreur d\'authentification:', error); // Ajoute ce log pour voir les erreurs
+    console.error('Erreur d\'authentification:', error.message);
     res.status(401).json({ message: 'Non autorisé' });
   }
 };
