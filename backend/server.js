@@ -8,8 +8,7 @@ dotenv.config();
 
 console.log('Clé secrète JWT:', process.env.JWT_SECRET);
 
-app.use(
-    helmet({
+app.use(helmet({
     contentSecurityPolicy: {
         directives: {
         defaultSrc: ["'self'"],
