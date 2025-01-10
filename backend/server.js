@@ -1,11 +1,28 @@
 const http = require('http');
 const app = require('./app');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
 const multer = require('./middleware/multer-config');
 
 dotenv.config();
 
 console.log('Clé secrète JWT:', process.env.JWT_SECRET);
+
+app.use(
+    helmet({
+    contentSecurityPolicy: {
+        directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://apis.google.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:"],
+        connectSrc: ["'self'", "https://api.example.com"],
+        frameSrc: ["'none'"],
+        },
+    },
+    })
+);
 
 const normalizePort = (val) => {
     const port = parseInt(val, 10);
@@ -59,6 +76,8 @@ server.on('listening', () => {
     const bind = typeof address === 'string' ? `pipe ${address}` : `port ${port}`;
     console.log(`Listening on ${bind}`);
 });
+
+
 
 
 
