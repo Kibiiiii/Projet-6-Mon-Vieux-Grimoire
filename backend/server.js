@@ -1,10 +1,12 @@
 const http = require('http');
 const app = require('./app');
 const dotenv = require('dotenv');
+const multer = require('./multer-config');
 
 dotenv.config();
 
-console.log('Clé secrète JWT:', process.env.JWT_SECRET); // Log pour vérif la clé
+console.log('Clé secrète JWT:', process.env.JWT_SECRET);
+
 const normalizePort = (val) => {
     const port = parseInt(val, 10);
     if (isNaN(port)) return val;
@@ -34,6 +36,19 @@ const errorHandler = (error) => {
 
 const server = http.createServer(app);
 
+app.post('/upload', (req, res) => {
+    multer(req, res, (err) => {
+        if (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ error: err.message });
+            } else if (err) {
+                return res.status(400).json({ error: err.message });
+            }
+        }
+        res.status(200).json({ message: 'Fichier uploadé avec succès !' });
+    });
+});
+
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
@@ -44,6 +59,7 @@ server.on('listening', () => {
     const bind = typeof address === 'string' ? `pipe ${address}` : `port ${port}`;
     console.log(`Listening on ${bind}`);
 });
+
 
 
 

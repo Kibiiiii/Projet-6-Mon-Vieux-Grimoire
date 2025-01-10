@@ -18,4 +18,10 @@ const fileFilter = (req, file, callback) => {
     }
 };
 
-module.exports = multer({ storage, fileFilter }).single('image');
+// Limite de taille : 5 Mo
+const limits = {
+    fileSize: 5 * 1024 * 1024 // 5 Mo en octets
+};
+
+module.exports = multer({ storage, fileFilter, limits }).single('image');
+
