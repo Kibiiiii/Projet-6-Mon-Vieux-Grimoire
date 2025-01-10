@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 const dotenv = require('dotenv');
-const multer = require('./multer-config');
+const multer = require('./middleware/multer-config');
 
 dotenv.config();
 
