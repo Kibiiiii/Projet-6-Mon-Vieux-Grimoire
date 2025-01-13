@@ -138,29 +138,20 @@ exports.rateBook = async (req, res) => {
     }
 };
 
-
-// Obtenir les livres avec les meilleures notes
-exports.bestRating = async (req, res) => {
-    try {
-        console.log("Requête reçue pour les livres les mieux notés");  // Vérifie si la requête est atteinte
-
-        const limit = 3;
-        const bestBooks = await Books.find({ averageRating: { $exists: true, $ne: null } })  // Vérifie que averageRating existe
-            .sort({ averageRating: -1 }) // Tri par moyenne décroissante
-            .limit(limit); // Limite des résultats
-
-        if (!bestBooks.length) {
-            console.log("Aucun livre trouvé avec une note valide");  // Ajoute ce log
-            return res.status(404).json({ message: 'Aucun livre avec une note valide trouvé.' });
-        }
-
-        console.log('Livres les mieux notés:', bestBooks);  // Affiche les livres dans la console pour debug
-        res.status(200).json(bestBooks);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des meilleures notes:', error);
-        res.status(500).json({ error: 'Erreur interne du serveur.' });
-    }
+// Récupérer les 3 meilleurs livres en fonction de la note moyenne
+exports.bestRating = (req, res, next) => {
+    Books.find() // Récupérer tous les livres
+        .sort({ averageRating: -1 }) // Trier par averageRating de manière décroissante
+        .limit(3) // Limiter à 3 livres
+        .then((books) => {
+            res.status(200).json(books);
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
 };
+
+
 
 
 
