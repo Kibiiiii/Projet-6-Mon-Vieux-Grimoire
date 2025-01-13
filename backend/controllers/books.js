@@ -107,7 +107,6 @@ exports.getOneBook = (req, res, next) => {
 exports.rateBook = async (req, res) => {
     try {
         const { userId, rating } = req.body;
-        console.log('Données reçues:', { userId, rating });
 
         if (!userId || rating === undefined) {
             return res.status(400).json({ error: 'User ID et note requis.' });
@@ -120,7 +119,6 @@ exports.rateBook = async (req, res) => {
         if (!book) {
             return res.status(404).json({ error: 'Livre non trouvé.' });
         }
-        console.log('Livre trouvé:', book);
 
         const alreadyRated = book.ratings.find((r) => r.userId === userId);
         if (alreadyRated) {
@@ -130,13 +128,45 @@ exports.rateBook = async (req, res) => {
         book.ratings.push({ userId, grade: rating });
         const totalRatings = book.ratings.length;
         const sumRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0);
-        book.averageRating = sumRatings / totalRatings;
+        book.averageRating = parseFloat((sumRatings / totalRatings).toFixed(1)); // Conserver 1 chiffre après la virgule
 
         await book.save();
-        console.log('Livre mis à jour avec succès:', book);
         res.status(200).json(book);
     } catch (error) {
         console.error('Erreur lors de la notation du livre:', error);
         res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
 };
+
+
+// Obtenir les livres avec les meilleures notes
+exports.bestRating = async (req, res) => {
+    try {
+        console.log("Requête reçue pour les livres les mieux notés");  // Vérifie si la requête est atteinte
+
+        const limit = 3;
+        const bestBooks = await Books.find({ averageRating: { $exists: true, $ne: null } })  // Vérifie que averageRating existe
+            .sort({ averageRating: -1 }) // Tri par moyenne décroissante
+            .limit(limit); // Limite des résultats
+
+        if (!bestBooks.length) {
+            console.log("Aucun livre trouvé avec une note valide");  // Ajoute ce log
+            return res.status(404).json({ message: 'Aucun livre avec une note valide trouvé.' });
+        }
+
+        console.log('Livres les mieux notés:', bestBooks);  // Affiche les livres dans la console pour debug
+        res.status(200).json(bestBooks);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des meilleures notes:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur.' });
+    }
+};
+
+
+
+
+
+
+
+
+

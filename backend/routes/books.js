@@ -18,12 +18,14 @@ const validateId = (req, res, next) => {
 // Routes
 router.get('/', booksCtrl.getAllBooks);
 router.post('/', auth, multer, booksCtrl.createBook);
+router.get('/bestrating', booksCtrl.bestRating);
 router.get('/:id', validateId, booksCtrl.getOneBook);
 router.put('/:id', auth, multer, validateId, booksCtrl.modifyBook);
 router.delete('/:id', auth, validateId, booksCtrl.deleteBook);
-router.post('/:id/rating', auth, validateId, booksCtrl.rateBook); // Nouvelle route pour noter un livre
+router.post('/:id/rating', auth, validateId, booksCtrl.rateBook);
 
 module.exports = router;
+
 
 
 
