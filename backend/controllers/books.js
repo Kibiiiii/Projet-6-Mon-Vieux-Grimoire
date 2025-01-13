@@ -140,9 +140,9 @@ exports.rateBook = async (req, res) => {
 
 // Récupérer les 3 meilleurs livres en fonction de la note moyenne
 exports.bestRating = (req, res, next) => {
-    Books.find() // Récupérer tous les livres
-        .sort({ averageRating: -1 }) // Trier par averageRating de manière décroissante
-        .limit(3) // Limiter à 3 livres
+    Books.find() 
+        .sort({ averageRating: -1 })
+        .limit(3)
         .then((books) => {
             res.status(200).json(books);
         })
