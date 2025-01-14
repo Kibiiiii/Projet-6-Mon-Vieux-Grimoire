@@ -8,8 +8,7 @@
         "plugin:react/recommended",
         "airbnb"
     ],
-    "overrides": [
-    ],
+    "overrides": [],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
@@ -19,6 +18,12 @@
     ],
     "rules": {
         "linebreak-style": 0,
-        "no-console": "off"
+        "no-console": "off",
+        "quotes": ["error", "single"],
+        "comma-dangle": ["error", "always-multiline"],
+        "operator-linebreak": ["error", "before"],
+        "react/jsx-one-expression-per-line": ["off"],
+        "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }]
     }
 }
+
