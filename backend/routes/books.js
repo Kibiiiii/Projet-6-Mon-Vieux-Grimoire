@@ -3,30 +3,17 @@ const router = express.Router();
 
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const resizeImage = require('../middleware/resize-image'); // Importer le middleware Sharp
 const booksCtrl = require('../controllers/books');
-const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Types;
-
-// Middleware pour valider l'ID
-const validateId = (req, res, next) => {
-    if (!ObjectId.isValid(req.params.id)) {
-        return res.status(400).json({ error: 'ID invalide' });
-    }
-    next();
-};
 
 // Routes
 router.get('/', booksCtrl.getAllBooks);
-router.post('/', auth, multer, booksCtrl.createBook);
+router.post('/', auth, multer, resizeImage, booksCtrl.createBook);
 router.get('/bestrating', booksCtrl.bestRating);
-router.get('/:id', validateId, booksCtrl.getOneBook);
-router.put('/:id', auth, multer, validateId, booksCtrl.modifyBook);
-router.delete('/:id', auth, validateId, booksCtrl.deleteBook);
-router.post('/:id/rating', auth, validateId, booksCtrl.rateBook);
+router.get('/:id', booksCtrl.getOneBook);
+router.put('/:id', auth, multer, resizeImage, booksCtrl.modifyBook); // Route modifiée
+router.delete('/:id', auth, booksCtrl.deleteBook);
+router.post('/:id/rating', auth, booksCtrl.rateBook);
 
 module.exports = router;
-
-
-
-
 

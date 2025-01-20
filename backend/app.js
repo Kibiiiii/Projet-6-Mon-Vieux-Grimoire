@@ -35,6 +35,11 @@ app.use(express.json());
 app.use("/api/books", booksRoutes);
 app.use("/api/auth", userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use((error, req, res, next) => {
+    console.error(error.message); // Pour afficher l'erreur dans la console
+    res.status(500).json({ error: error.message });
+});
+
 
 module.exports = app;
 

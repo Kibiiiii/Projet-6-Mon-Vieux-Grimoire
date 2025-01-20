@@ -59,11 +59,12 @@ exports.modifyBook = (req, res, next) => {
                 { _id: req.params.id },
                 { ...bookObject, _id: req.params.id }
             )
-                .then(() => res.status(200).json({ message: 'Livre modifié !' }))
+                .then(() => res.status(200).json({ message: 'Livre modifié avec succès !' }))
                 .catch((error) => res.status(400).json({ error }));
         })
         .catch((error) => res.status(400).json({ error }));
 };
+
 
 // Supprimer un livre
 exports.deleteBook = (req, res, next) => {
@@ -150,14 +151,4 @@ exports.bestRating = (req, res, next) => {
             res.status(400).json({ error });
         });
 };
-
-
-
-
-
-
-
-
-
-
 
